@@ -30,8 +30,8 @@ test('get order with 0 id should receive code 400', async ({ request }) => {
   // Build and send a GET request to the server
   const response = await request.get('https://backend.tallinn-learning.ee/test-orders/0');
   // Log the response status, body and headers
-  console.log('response body:', await response.json()) // не хотим выводить в консоль
-  console.log('response headers:', response.headers()) // не хотим выводить в консоль
+  console.log('response body:', await response.json()); // не хотим выводить в консоль
+  console.log('response headers:', response.headers()); // не хотим выводить в консоль
   // Check if the response status is 400
   expect(response.status()).toBe(400);
 });
@@ -40,8 +40,8 @@ test('get order with 11 id should receive code 400', async ({ request }) => {
   // Build and send a GET request to the server
   const response = await request.get('https://backend.tallinn-learning.ee/test-orders/11');
   // Log the response status, body and headers
-  console.log('response body:', await response.json()) // не хотим выводить в консоль
-  console.log('response headers:', response.headers()) // не хотим выводить в консоль
+  console.log('response body:', await response.json()); // не хотим выводить в консоль
+  console.log('response headers:', response.headers()); // не хотим выводить в консоль
   // Check if the response status is 400
   expect(response.status()).toBe(400);
 });
@@ -50,8 +50,8 @@ test('get order with null id should receive code 400', async ({ request }) => {
   // Build and send a GET request to the server
   const response = await request.get('https://backend.tallinn-learning.ee/test-orders/');
   // Log the response status, body and headers
-  console.log('response body:', await response.json()) // не хотим выводить в консоль
-  console.log('response headers:', response.headers()) // не хотим выводить в консоль
+  console.log('response body:', await response.json()); // не хотим выводить в консоль
+  console.log('response headers:', response.headers()); // не хотим выводить в консоль
   // Check if the response status is 500
   expect(response.status()).toBe(500);
 });
@@ -81,25 +81,34 @@ test('post order with incorrect data should receive code 415', async ({ request 
 // HW-09
 // === GET /test-orders ===
 test.describe('get tests', () => {
+  const baseUrl = 'https://backend.tallinn-learning.ee/test-orders';
   test('get request with valid username and password should return 200 OK and api_key', async ({
     request
   }) => {
-    const response = await request.get(
-      'https://backend.tallinn-learning.ee/test-orders?username=username&password=password'
-    );
+    const queryParams = new URLSearchParams({
+      username: 'username',
+      password: 'password'
+    });
+
+    const response = await request.get(`${baseUrl}?${queryParams.toString()}`);
     console.log('response body:', await response.json());
     console.log('response headers:', response.headers());
+    console.log('Status:', response.status());
     expect(response.status()).toBe(StatusCodes.OK);
   });
 
   test('get request with valid username and empty password should return 500', async ({
     request
   }) => {
-    const response = await request.get(
-      'https://backend.tallinn-learning.ee/test-orders?username=username&password='
-    );
+    const queryParams = new URLSearchParams({
+      username: 'username',
+      password: ''
+    });
+
+    const response = await request.get(`${baseUrl}?${queryParams.toString()}`);
     console.log('response body:', await response.json());
     console.log('response headers:', response.headers());
+    console.log('Status:', response.status());
     expect(response.status()).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
   });
 
@@ -115,3 +124,7 @@ test.describe('get tests', () => {
     expect(response.status()).toBe(StatusCodes.BAD_REQUEST);
   });
 });
+
+/*test.describe('post tests', () => {
+  test;
+});*/
