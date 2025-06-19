@@ -5,6 +5,7 @@ export class OrderDto {
   customerPhone: string;
   comment: string;
   id: number | undefined;
+  //static id: number;
 
   private constructor(
     customerName: string,
@@ -24,22 +25,38 @@ export class OrderDto {
   static createOrderWithRandomData(): OrderDto {
     return new OrderDto(
       'John Doe',
-      '+123345678',
+      '+1234567890',
       'test comment',
-      Math.floor(Math.random() * 100),
+      Math.floor(Math.random() * 10) + 1,
       'OPEN',
       Math.floor(Math.random() * 100)
     );
   }
-  // add a method to create a new instance with orderid = undefined
+
+  // add a method to create a new instance with fixed id
+  static createOrderWithFixedId(id: number): OrderDto {
+    const order = this.createOrderWithRandomData();
+    order.id = id;
+    return order;
+  }
+
+  // add a method to create a new instance with orderId = undefined
   static createOrderWithoutId(): OrderDto {
     return new OrderDto(
       'John Doe',
       '+1234567890',
       '+test comment',
-      Math.floor(Math.random() * 100),
+      Math.floor(Math.random() * 10) + 1,
       'OPEN',
       undefined
     );
   }
+
+  // add a method to create a new instance with invalid id
+  static createOrderWithInvalidId(invalidId: any): OrderDto {
+    const order = this.createOrderWithRandomData();
+    order.id = invalidId;
+    return order;
+  }
+
 }

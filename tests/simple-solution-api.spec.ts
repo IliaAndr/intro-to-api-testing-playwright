@@ -78,6 +78,8 @@ test('post order with incorrect data should receive code 415', async ({ request 
   console.log('response body:', await response.json());
   expect(response.status()).toBe(StatusCodes.UNSUPPORTED_MEDIA_TYPE);
 });
+
+
 // HW-09
 // === GET /test-orders ===
 test.describe('get tests', () => {
@@ -125,6 +127,144 @@ test.describe('get tests', () => {
   });
 });
 
-/*test.describe('post tests', () => {
-  test;
-});*/
+// === PUT /test-orders/{id} ===
+test.describe('put tests', () => {
+  const baseUrl = 'https://backend.tallinn-learning.ee/test-orders';
+  test('put request with 16-digits api_key, valid id and full and valid body returns 200 OK', async ({ request }) =>{
+    const order = OrderDto.createOrderWithFixedId(5);
+    const apiKey = '1234567890123456';
+    const requestBody = order;
+    const response = await request.put(`${baseUrl}/${order.id}`, {
+      data: requestBody,
+      headers: {
+        'content-type': 'application/json',
+        'api_key': apiKey,
+      },
+    });
+    console.log('response status:', response.status());
+    console.log('request body:', requestBody);
+    console.log('api_key:', apiKey);
+    console.log('response body:', await response.json());
+    console.log('url:', `${baseUrl}/${order.id}`);
+    console.log('order id in body:', requestBody.id);
+    expect.soft(response.status()).toBe(StatusCodes.OK);
+  });
+
+  test('put request with empty api_key, valid id and full and valid body returns 401', async ({ request }) =>{
+    const order = OrderDto.createOrderWithFixedId(5);
+    const apiKey = '';
+    const requestBody = order;
+    const response = await request.put(`${baseUrl}/${order.id}`, {
+      data: requestBody,
+      headers: {
+        'content-type': 'application/json',
+        'api_key': apiKey,
+      },
+    });
+    console.log('response status:', response.status());
+    console.log('request body:', requestBody);
+    console.log('api_key:', apiKey);
+    console.log('url:', `${baseUrl}/${order.id}`);
+    console.log('order id in body:', requestBody.id);
+    expect.soft(response.status()).toBe(StatusCodes.UNAUTHORIZED);
+  });
+
+  test('put request with 15-digits api_key, valid id and full and valid body returns 401', async ({ request }) =>{
+    const order = OrderDto.createOrderWithFixedId(5);
+    const apiKey = '123456789012345';
+    const requestBody = order;
+    const response = await request.put(`${baseUrl}/${order.id}`, {
+      data: requestBody,
+      headers: {
+        'content-type': 'application/json',
+        'api_key': apiKey,
+      },
+    });
+    console.log('response status:', response.status());
+    console.log('request body:', requestBody);
+    console.log('api_key:', apiKey);
+    console.log('url:', `${baseUrl}/${order.id}`);
+    console.log('order id in body:', requestBody.id);
+    expect.soft(response.status()).toBe(StatusCodes.UNAUTHORIZED);
+  });
+
+  test('put request with 17-digits api_key, valid id and full and valid body returns 401', async ({ request }) =>{
+    const order = OrderDto.createOrderWithFixedId(5);
+    const apiKey = '12345678901234567';
+    const requestBody = order;
+    const response = await request.put(`${baseUrl}/${order.id}`, {
+      data: requestBody,
+      headers: {
+        'content-type': 'application/json',
+        'api_key': apiKey,
+      },
+    });
+    console.log('response status:', response.status());
+    console.log('request body:', requestBody);
+    console.log('api_key:', apiKey);
+    console.log('url:', `${baseUrl}/${order.id}`);
+    console.log('order id in body:', requestBody.id);
+    expect.soft(response.status()).toBe(StatusCodes.UNAUTHORIZED);
+  });
+
+  test('put request with 1-digit api_key, valid id and full and valid body returns 401', async ({ request }) =>{
+    const order = OrderDto.createOrderWithFixedId(5);
+    const apiKey = '1';
+    const requestBody = order;
+    const response = await request.put(`${baseUrl}/${order.id}`, {
+      data: requestBody,
+      headers: {
+        'content-type': 'application/json',
+        'api_key': apiKey,
+      },
+    });
+    console.log('response status:', response.status());
+    console.log('request body:', requestBody);
+    console.log('api_key:', apiKey);
+    console.log('url:', `${baseUrl}/${order.id}`);
+    console.log('order id in body:', requestBody.id);
+    expect.soft(response.status()).toBe(StatusCodes.UNAUTHORIZED);
+  });
+
+  test('put request with 16-digits api_key, invalid id and full and valid body returns 400', async ({ request }) =>{
+    const order = OrderDto.createOrderWithInvalidId('test');
+    const apiKey = '1234567890123456';
+    const requestBody = order;
+    const response = await request.put(`${baseUrl}/${order.id}`, {
+      data: requestBody,
+      headers: {
+        'content-type': 'application/json',
+        'api_key': apiKey,
+      },
+    });
+    console.log('response status:', response.status());
+    console.log('request body:', requestBody);
+    console.log('api_key:', apiKey);
+    console.log('response body:', await response.json());
+    console.log('url:', `${baseUrl}/${order.id}`);
+    console.log('order id in body:', requestBody.id);
+    expect.soft(response.status()).toBe(StatusCodes.BAD_REQUEST);
+  });
+
+  test('put request with 16-digits api_key, valid id (url) and empty body returns 400', async ({ request }) =>{
+    const apiKey = '1234567890123456';
+    const id = 5;
+    //const requestBody = {};
+    const response = await request.put(`${baseUrl}/${id}`, {
+      //data: requestBody,
+      headers: {
+        'content-type': 'application/json',
+        'api_key': apiKey
+      }
+    });
+    console.log('response status:', response.status());
+    console.log('request body: <no body sent>');
+    console.log('api_key:', apiKey);
+    console.log('url:', `${baseUrl}/${id}`);
+    console.log('response body:', await response.text());
+    expect.soft(response.status()).toBe(StatusCodes.BAD_REQUEST);
+  });
+
+});
+
+
