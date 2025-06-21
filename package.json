@@ -6,8 +6,9 @@
     "prettier:format": "prettier --write \"tests/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "prettier:check": "prettier --check \"tests/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "lint": "eslint tests",
-    "test": "npx playwright test",
-    "prepare": "husky"
+    "test:playwright": "npx playwright test",
+    "prepare": "husky",
+    "test": "NODE_NO_WARNINGS=1 jest"
   },
   "keywords": [],
   "author": "",

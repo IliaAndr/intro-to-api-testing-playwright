@@ -1,9 +1,6 @@
-//eslint-disable-next-line @typescript-eslint/no-require-imports
-const axios = require('axios');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { test: test, describe, expect } = require('@jest/globals');
-//eslint-disable-next-line @typescript-eslint/no-require-imports
-const { OrderDto } = require('./dto/order-dto');
+import { test, describe, expect } from '@jest/globals';
+import axios from 'axios';
+import { OrderDto } from './dto/order-dto';
 
 describe('API tests', () => {
   const baseUrl = 'https://backend.tallinn-learning.ee/test-orders';
