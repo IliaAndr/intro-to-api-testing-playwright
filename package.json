@@ -6,22 +6,44 @@
     "prettier:format": "prettier --write \"tests/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "prettier:check": "prettier --check \"tests/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "lint": "eslint tests",
-    "test": "npx playwright test"
+    "test": "npx playwright test",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "| #   | Name                                                                                           | Test Data                                                          | Status     | Comment       | |:----|:-----------------------------------------------------------------------------------------------|:-------------------------------------------------------------------|:-----------|:--------------| | 1.  | GET request with valid username and password returns 200 OK and api_key                        | username = username, password = password                           | [x] passed |               | | 2.  | GET request with valid username and empty password returns 500                                 | username = username, password =                                    | [x] passed | 400 is better | | 3.  | GET request with object username and valid password returns 400                                | username = {\"a\": 1}, password = password                           | [x] passed |               | | 4.  | PUT request with 16-digits api_key, valid id and full and valid body returns 200 OK            | api_key = 1234567890123456, id = 5 , full & valid Request Body     | [x] passed |               | | 5.  | PUT request with empty api_key, valid id and valid body returns 401 UNAUTHORIZED               | empty api_key, id = 5, full & valid Request Body                   | [x] passed |               | | 6.  | PUT request with 15-digits api_key, valid id and valid body returns 401 UNAUTHORIZED           | api_key = 123456789012345, id = 5, full & valid Request Body       | [x] passed |               | | 7.  | PUT request with 17-digits api_key, valid id and valid body returns 401 UNAUTHORIZED           | api_key = 12345678901234567, id = 5, full & valid Request Body     | [x] passed |               | | 8.  | PUT request with 1-digit api_key, valid id and valid body returns 401 UNAUTHORIZED             | api_key = 1, id = 5, full & valid Request Body                     | [x] passed |               | | 9.  | PUT request with 16-digits api_key, invalid id and full and valid body returns 400 BAD_REQUEST | api_key = 1234567890123456, id = 'test', full & valid Request Body | [x] passed |               | | 10. | PUT request with 16-digits api_key, valid id (path), no request body returns 400 BAD_REQUEST   | api_key = 1234567890123456, id = 5                                 | [x] passed |               | | 11. | DELETE request with 16-digits api_key, valid id (path) returns 204 NO_CONTENT                  | api_key = 1234567890123456, id = 5                                 | [x] passed |               | | 12. | DELETE request with empty api_key, valid id (path) returns 401 UNAUTHORIZED                    | empty api_key, id = 5                                              | [x] passed |               | | 13. | DELETE request with 15-digits api_key, valid id (path) returns 401 UNAUTHORIZED                | api_key = 123456789012345, id = 5                                  | [x] passed |               | | 14. | DELETE request with 17-digits api_key, valid id (path) returns 401 UNAUTHORIZED                | api_key = 12345678901234567, id = 5                                | [x] passed |               | | 15. | DELETE request with 1-digit api_key, valid id (path) returns 401 UNAUTHORIZED                  | api_key = 1, id = 5                                                | [x] passed |               | | 16. | DELETE request without api_key parameter, valid id (path) returns 400 BAD_REQUEST              | api_key = 1, id = 5                                                | [x] passed |               | | 17. | DELETE request with 16-digits api_key, invalid id returns 400 BAD_REQUEST                      | api_key = 1234567890123456, id = 'test'                            | [x] passed |               |",
   "devDependencies": {
     "@eslint/js": "^9.12.0",
+    "@jest/globals": "^30.0.2",
     "@playwright/test": "^1.48.0",
+    "@types/axios": "^0.9.36",
+    "@types/jest": "^30.0.0",
     "@types/node": "^22.7.5",
     "eslint": "^9.12.0",
     "globals": "^15.11.0",
     "http-status-codes": "^2.3.0",
+    "husky": "^9.1.7",
+    "jest": "^30.0.2",
     "prettier": "^3.3.3",
     "prettier-plugin-organize-imports": "^4.1.0",
-    "typescript": "^5.6.3",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.8.1"
-  }
+  },
+  "dependencies": {
+    "axios": "^1.10.0"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IliaAndr/intro-to-api-testing-playwright.git"
+  },
+  "bugs": {
+    "url": "https://github.com/IliaAndr/intro-to-api-testing-playwright/issues"
+  },
+  "homepage": "https://github.com/IliaAndr/intro-to-api-testing-playwright#readme"
 }
