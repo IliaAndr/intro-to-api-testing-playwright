@@ -79,7 +79,6 @@ test.describe('LoanRiskCalcDto', () => {
       expect.soft(body).toHaveProperty('applicationId');
       expect.soft(body.riskPeriods).toEqual([]);
     });
-
   });
 
   test.describe('Unsuccessful request', () => {
@@ -98,12 +97,12 @@ test.describe('LoanRiskCalcDto', () => {
     test('with zero values of digital request body parameters', async ({ request }) => {
       const requestBody = LoanRiskCalcDto.createParamsWithZeroes();
       const response = await request.post(`${baseUrl}`, {
-          data: requestBody
-        });
+        data: requestBody
+      });
       expect(response.status()).toBe(StatusCodes.BAD_REQUEST);
     });
 
-    test('with negative value of debt',  async ({ request }) => {
+    test('with negative value of debt', async ({ request }) => {
       const requestBody = LoanRiskCalcDto.createParamsWithVariableDebt(-5);
       const response = await request.post(`${baseUrl}`, {
         data: requestBody
@@ -111,7 +110,7 @@ test.describe('LoanRiskCalcDto', () => {
       expect(response.status()).toBe(StatusCodes.BAD_REQUEST);
     });
 
-    test('with negative value of age',  async ({ request }) => {
+    test('with negative value of age', async ({ request }) => {
       const requestBody = LoanRiskCalcDto.createParamsWithVariableAge(-5);
       const response = await request.post(`${baseUrl}`, {
         data: requestBody
@@ -119,7 +118,7 @@ test.describe('LoanRiskCalcDto', () => {
       expect(response.status()).toBe(StatusCodes.BAD_REQUEST);
     });
 
-    test('with negative value of loanAmount',  async ({ request }) => {
+    test('with negative value of loanAmount', async ({ request }) => {
       const requestBody = LoanRiskCalcDto.createParamsWithVariableLoanAmount(-5);
       const response = await request.post(`${baseUrl}`, {
         data: requestBody
@@ -127,13 +126,12 @@ test.describe('LoanRiskCalcDto', () => {
       expect(response.status()).toBe(StatusCodes.BAD_REQUEST);
     });
 
-    test('with negative value of loanPeriod',  async ({ request }) => {
+    test('with negative value of loanPeriod', async ({ request }) => {
       const requestBody = LoanRiskCalcDto.createParamsWithVariableLoanPeriod(-5);
       const response = await request.post(`${baseUrl}`, {
         data: requestBody
       });
       expect(response.status()).toBe(StatusCodes.BAD_REQUEST);
     });
-
   });
 });
