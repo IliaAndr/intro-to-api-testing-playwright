@@ -139,5 +139,4 @@ test.describe('Tallinn delivery API tests', () => {
     });
     expect(response.status()).toBe(StatusCodes.UNSUPPORTED_MEDIA_TYPE);
   });
-
 });
