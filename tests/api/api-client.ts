@@ -3,11 +3,7 @@ import { LoginDto } from '../dto/login-dto';
 import { StatusCodes } from 'http-status-codes';
 import { expect } from '@playwright/test';
 import { OrderDto } from '../dto/order-dto';
-
-const serviceURL = 'https://backend.tallinn-learning.ee/';
-const loginPath = 'login/student';
-const orderPath = 'orders';
-const deletePath = 'orders';
+import { serviceURL, paths } from '../helpers/config';
 
 export class ApiClient {
   static instance: ApiClient;
@@ -28,7 +24,7 @@ export class ApiClient {
 
   private async requestJwt(): Promise<void> {
     console.log('Requesting JWT...');
-    const authResponse = await this.request.post(`${serviceURL}${loginPath}`, {
+    const authResponse = await this.request.post(`${serviceURL}${paths.login}`, {
       data: LoginDto.createLoginWithCorrectData()
     });
     // Check response status for negative cases
@@ -45,16 +41,18 @@ export class ApiClient {
 
   async createOrderAndReturnOrderId(): Promise<number> {
     console.log('Creating order...');
-    const response = await this.request.post(`${serviceURL}${orderPath}`, {
+    const response = await this.request.post(`${serviceURL}${paths.order}`, {
       data: OrderDto.createOrderWithRandomData(),
       headers: {
         Authorization: `Bearer ${this.jwt}`
       }
     });
-    console.log('Order response: ', response);
+    console.log('Order response status:', response.status());
+    const responseBody = await response.json();
+    console.log('Order response body:', responseBody);
 
     expect(response.status()).toBe(StatusCodes.OK);
-    const responseBody = await response.json();
+
     console.log('Order created: ');
     console.log(responseBody);
 
@@ -62,17 +60,36 @@ export class ApiClient {
   }
 
   async deleteOrder(orderId: number): Promise<APIResponse> {
-    console.log('Delete order...');
-    const response = await this.request.delete(`${serviceURL}${deletePath}/${orderId}`, {
+    console.log('Deleting order...');
+    const response = await this.request.delete(`${serviceURL}${paths.delete}/${orderId}`, {
       headers: {
         Authorization: `Bearer ${this.jwt}`
       }
     });
-    console.log('Delete response: ', response);
-
+    console.log('Delete response status:', response.status());
     const responseBody = await response.json();
-    console.log('Order deleted: ');
-    console.log(responseBody);
+    console.log('Order deleted response body:', responseBody);
     return response;
+  }
+
+  async findOrder(orderId: number): Promise<OrderDto> {
+    console.log('Getting order...');
+    const gettingOrderResponse = await this.request.get(`${serviceURL}${paths.get}/${orderId}`, {
+      headers: {
+        Authorization: `Bearer ${this.jwt}`
+      }
+    });
+    const responseBody = await gettingOrderResponse.json();
+    console.log('Getting order response status:', gettingOrderResponse.status());
+    console.log('Getting order response body:', responseBody);
+    expect(gettingOrderResponse.status()).toBe(StatusCodes.OK);
+
+    return responseBody;
+  }
+
+  async getOrderResponseRaw(orderId: number): Promise<APIResponse> {
+    return await this.request.get(`${serviceURL}${paths.order}/${orderId}`, {
+      headers: { Authorization: `Bearer ${this.jwt}` }
+    });
   }
 }
